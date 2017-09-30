@@ -11,7 +11,7 @@ It also means you'll never have to write a for loop again.
 
 Curious? Let's dive in.
 
-A Map From List to List
+<h1>A Map From List to List</h1>
 
 Often, we find ourselves needing to take an array and modify every element in it in exactly the same way. Typical examples of this are squaring every element in an array of numbers, retrieving the name from a list of users, or running a regex against an array of strings.
 
@@ -29,35 +29,6 @@ Let's look at some code.
 map in Practice
 Suppose we have an app that maintains an array of your tasks for the day. Each task is an object, each with a name and duration property:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
 // Durations are in minutes
  
 var tasks = [
@@ -87,15 +58,9 @@ var tasks = [
   }
  
 ];
+
 Let's say we want to create a new array with just the name of each task, so we can take a look at everything we've gotten done today. Using a for loop, we'd write something like this:
 
-1
-2
-3
-4
-5
-6
-7
 var task_names = [];
  
 for (var i = 0, max = tasks.length; i < max; i += 1) {
@@ -105,13 +70,6 @@ for (var i = 0, max = tasks.length; i < max; i += 1) {
 }
 JavaScript also offers a forEach loop. It functions like a for loop, but manages all the messiness of checking our loop index against the array length for us:
 
-1
-2
-3
-4
-5
-6
-7
 var task_names = [];
  
 tasks.forEach(function (task) {
@@ -119,18 +77,15 @@ tasks.forEach(function (task) {
     task_names.push(task.name);
      
 });
+
 Using map, we can write:
 
-1
-2
-3
-4
-5
 var task_names = tasks.map(function (task, index, array) {
  
     return task.name; 
  
 });
+
 I include the index and  array parameters to remind you that they're there if you need them. Since I didn't use them here, though, you could leave them out, and the code would run just fine.
 
 There are a few important differences between the two approaches:
@@ -167,23 +122,7 @@ Fortunately, this is the only gotcha with map. But it's a common enough pitfall 
 Implementation
 Reading implementations is an important part of understanding. So, let's write our own lightweight map to better understand what's going on under the hood. If you want to see a production-quality implementation, check out Mozilla's polyfill at MDN.
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-15
-16
-17
+
 var map = function (array, callback) {
  
     var new_array = [];
@@ -201,13 +140,14 @@ var task_names = map(tasks, function (task) {
     return task.name;
  
 });
+
 This code accepts an array and a callback function as arguments. It then creates a new array; executes the callback on each element on the array we passed in; pushes the results into the new array; and returns the new array. If you run this in your console, you'll get the same result as before. Just make sure you initialize tasks before you test it out!
 
 While we're using a for loop under the hood, wrapping it up into a function hides the details and lets us work with the abstraction instead. 
 
 That makes our code more declarative—it says what to do, not how to do it. You'll appreciate how much more readable, maintainable, and, erm, debuggable this can make your code.
 
-Filter Out the Noise
+<h1>Filter Out the Noise</h1>
 
 The next of our array operations is filter. It does exactly what it sounds like: It takes an array, and filters out unwanted elements.
 
@@ -223,13 +163,6 @@ Let's revisit our task example. Instead of pulling out the names of each task, l
 
 Using forEach, we'd write:
 
-1
-2
-3
-4
-5
-6
-7
 var difficult_tasks = [];
  
 tasks.forEach(function (task) {
@@ -237,14 +170,9 @@ tasks.forEach(function (task) {
         difficult_tasks.push(task);
     }
 });
+
 With filter:
 
-1
-2
-3
-4
-5
-6
 var difficult_tasks = tasks.filter(function (task) {
     return task.duration >= 120;
 });
@@ -269,19 +197,6 @@ Always make sure your callbacks include an explicit return statement. And always
 Implementation
 Once again, the best way to understand a piece of code is... well, to write it. Let's roll our own lightweight filter. The good folks at Mozilla have an industrial-strength polyfill for you to read, too.
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
 var filter = function (array, callback) {
  
     var filtered_array = [];
@@ -295,7 +210,8 @@ var filter = function (array, callback) {
     return filtered_array;
  
 };
-Reducing Arrays
+
+<h1>Reducing Arrays</h1>
 
 map creates a new array by transforming every element in an array, individually. filter creates a new array by removing elements that don't belong. reduce, on the other hand, takes all of the elements in an array, and reduces them into a single value.
 
@@ -316,26 +232,19 @@ Since reduce is the function that people find most alien at first, we'll start b
 
 Let's say we want to find the sum of a list of numbers. Using a loop, that looks like this:
 
-1
-2
-3
-4
-5
-6
 var numbers = [1, 2, 3, 4, 5],
     total = 0;
      
 numbers.forEach(function (number) {
     total += number;
 });
+
 While this isn't a bad use case for forEach, reduce still has the advantage of allowing us to avoid mutation. With reduce, we would write:
 
-1
-2
-3
 var total = [1, 2, 3, 4, 5].reduce(function (previous, current) {
     return previous + current;
 }, 0);
+
 First, we call reduce on our list of numbers. We pass it a callback, which accepts the previous value and current value as arguments, and returns the result of adding them together.  Since we passed 0 as a second argument to reduce, it'll use that as the value of previous on the first iteration.
 
 If we take it step by step, it looks like this:
@@ -348,15 +257,6 @@ Iteration 	Previous	Current	Total
 5	10	5	15
 If you're not a fan of tables, run this snippet in the console:
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
 var total = [1, 2, 3, 4, 5].reduce(function (previous, current, index) {
     var val = previous + current;
     console.log("The previous value is " + previous + 
@@ -374,13 +274,6 @@ What if we wanted to know the total amount of time we spent working today?
 
 Using a forEach loop, you'd write:
 
-1
-2
-3
-4
-5
-6
-7
 var total_time = 0;
      
 tasks.forEach(function (task) {
@@ -388,14 +281,9 @@ tasks.forEach(function (task) {
     // task.duration from a String to a Number
     total_time += (+task.duration);
 });
+
 With reduce, that becomes:
 
-1
-2
-3
-4
-5
-6
 var total_time = tasks.reduce(function (previous, current) {
     return previous + current;
 }, 0);
@@ -406,12 +294,6 @@ Easy.
 
 That's almost all there is to it. Almost, because JavaScript provides us with one more little-known method, called reduceRight. In the examples above, reduce started at the first item in the array, iterating from left to right:
 
-1
-2
-3
-4
-5
-6
 var array_of_arrays = [[1, 2], [3, 4], [5, 6]];
 var concatenated = array_of_arrays.reduce( function (previous, current) {
         return previous.concat(current);
@@ -420,12 +302,6 @@ var concatenated = array_of_arrays.reduce( function (previous, current) {
 console.log(concatenated); // [1, 2, 3, 4, 5, 6];
 reduceRight does the same thing, but in the opposite direction:
 
-1
-2
-3
-4
-5
-6
 var array_of_arrays = [[1, 2], [3, 4], [5, 6]];
 var concatenated = array_of_arrays.reduceRight( function (previous, current) {
         return previous.concat(current);
@@ -451,15 +327,6 @@ Second, if reduce did return an array with a single value, it would naturally pl
 Implementation
 Time for our last look under the hood. As usual, Mozilla has a bulletproof polyfill for reduce if you want to check it out.
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
 var reduce = function (array, callback, initial) {
     var accumulator = initial || 0;
      
@@ -469,13 +336,13 @@ var reduce = function (array, callback, initial) {
      
     return accumulator;
 };
+
 Two things to note, here:
 
 This time, I used the name accumulator instead of previous. This is what you'll usually see in the wild.
 I assign accumulator an initial value, if a user provides one, and default to 0, if not. This is how the real reduce behaves, as well.
 
-Advertisement
-Putting It Together: Map, Filter, Reduce, and Chainability
+<h1>Putting It Together: Map, Filter, Reduce, and Chainability</h1>
 
 At this point, you might not be that impressed. 
 
@@ -493,33 +360,6 @@ Multiply the result by a per-hour rate for billing.
 Output a formatted dollar amount.
 First, let's define our tasks for Monday and Tuesday:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
 var monday = [
         {
             'name'     : 'Write a tutorial',
@@ -549,21 +389,6 @@ var tuesday = [
 var tasks = [monday, tuesday];
 And now, our lovely-looking transformation:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-15
 var result = tasks.reduce(function (accumulator, current) {
                     return accumulator.concat(current);
                 }).map(function (task) {
@@ -581,20 +406,6 @@ var result = tasks.reduce(function (accumulator, current) {
                 });
 Or, more concisely:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
                   // Concatenate our 2D array into a single list
 var result = tasks.reduce((acc, current) => acc.concat(current))
                   // Extract the task duration, and convert minutes to hours
@@ -613,10 +424,6 @@ If you've made it this far, this should be pretty straightforward. There are two
 
 First, on line 10, I have to write:
 
-1
-2
-3
-4
 // Remainder omitted
 reduce(function (accumulator, current) {
     return [(+accumulator) + (+current_];
@@ -627,12 +434,6 @@ The plus signs in front of accumulator and current coerce their values to number
 If don't wrap that sum in brackets, reduce will spit out a single value, not an array. That would end up throwing a TypeError, because you can only use map on an array! 
 The second bit that might make you a bit uncomfortable is the last reduce, namely:
 
-1
-2
-3
-4
-5
-6
 // Remainder omitted
 map(function (dollar_amount) {
     return '$' + dollar_amount.toFixed(2);
@@ -643,19 +444,6 @@ That call to map returns an array containing a single value. Here, we call reduc
 
 The other way to do this would be to remove the call to reduce, and index into the array that map spits out:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
 var result = tasks.reduce(function (accumulator, current) {
                     return accumulator.concat(current);
                 }).map(function (task) {
@@ -675,26 +463,6 @@ But I encourage you not to. One of the most powerful ways to use these functions
 
 Finally, let's see how our friend the forEach loop would get it done:
 
-01
-02
-03
-04
-05
-06
-07
-08
-09
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
 var concatenated = monday.concat(tuesday),
     fees = [],
     formatted_sum,
