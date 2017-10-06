@@ -155,9 +155,11 @@ Like map, filter is defined on Array.prototype. It's available on any array, and
 
 Also like map, filter passes your callback three arguments:
 
-The current item 
-The current index
-The array you called filter on
+<ul>
+ <li>The current item 
+ <li>The current index
+ <li>The array you called filter on
+</ul>
 filter in Practice
 Let's revisit our task example. Instead of pulling out the names of each task, let's say I want to get a list of just the tasks that took me two hours or more to get done. 
 
